@@ -1,25 +1,42 @@
 #!/usr/bin/env bash
 
-SEARCHER_ZIP="searcher.zip"
+declare -A LAMBDAS=(["searcher"]="TwitterSearcher" ["email"]="MailSenderLambda" ["speech"]="TextToSpeechLambda")
+
 BUCKET="lambdas-sam-van-overmeire"
 LAMBDA_FOLDER="lambda-zips/"
 LAMBDA_NAME="TwitterSearcher"
 
-cd searcher
-echo "Installing dependencies for searcher"
-pip3 install twitter-application-only-auth -t . >> /dev/null
+function handle_lambda {
+    folder=$1
+    function_name=$2
+    zip_name=${folder}.zip
 
-echo "Zipping"
-zip -r ${SEARCHER_ZIP} . >> /dev/null
+    cd ${folder}
 
-echo "Uploading zip to S3"
-aws s3 cp ${SEARCHER_ZIP} "s3://${BUCKET}/$LAMBDA_FOLDER" >> /dev/null
+    zip -r ${zip_name} . >> /dev/null
 
-echo "Updating function"
-aws lambda update-function-code --function-name ${LAMBDA_NAME} \
+    echo "Uploading zip $zip_name to S3"
+    aws s3 cp ${zip_name} "s3://${BUCKET}/$LAMBDA_FOLDER" >> /dev/null
+
+    echo "Updating function"
+    aws lambda update-function-code --function-name ${function_name} \
     --s3-bucket ${BUCKET} \
-    --s3-key "${LAMBDA_FOLDER}${SEARCHER_ZIP}" >> /dev/null
+    --s3-key "${LAMBDA_FOLDER}${zip_name}" >> /dev/null
 
-echo "Cleaning"
+    rm ${zip_name}
+
+    cd ..
+}
+
+# add some dependencies
+cd searcher
+pip3 install twitter-application-only-auth -t . >> /dev/null
+cd ..
+
+for folder in "${!LAMBDAS[@]}"
+do
+    handle_lambda ${folder} ${LAMBDAS[$folder]}
+done
+
+# remove the downloaded dependencies
 rm -r *application_only*
-rm ${SEARCHER_ZIP}
