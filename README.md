@@ -8,3 +8,4 @@ them to your email address.
 - polly lambda
 - email lambda
 - automatic infrastructure
+- tests

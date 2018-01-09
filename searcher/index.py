@@ -6,7 +6,7 @@ from application_only_auth import Client
 base_search_url = 'https://api.twitter.com/1.1/search/tweets.json?count=%d&q=%s'
 COUNT = 5
 
-BUCKET_PREFIX = 'tweets/'
+TWEET_BUCKET_PREFIX = 'tweets/'
 AT_REPLACER = '***'
 
 # doing this outside the lambda is better for performance
@@ -25,12 +25,11 @@ def create_key(tag, email):
     if '#' in tag:
         tag = tag.replace('#', '')
 
-    return BUCKET_PREFIX + email + '/' + tag
+    return TWEET_BUCKET_PREFIX + email + '/' + tag
 
 
-def create_s3_data(email, tweets):
-    payload = email + '\n'
-    payload = payload + '\n'.join(tweets)
+def create_s3_data(tweets):
+    payload = '\n'.join(tweets)
     return payload
 
 
@@ -65,7 +64,7 @@ def my_handler(event, context):
     tweets = get_tweet_text(tag)
 
     key = create_key(tag, email)
-    data = create_s3_data(email, tweets)
+    data = create_s3_data(tweets)
 
     store_in_s3(data, BUCKET, key)
 
