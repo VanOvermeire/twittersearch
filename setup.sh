@@ -39,4 +39,6 @@ do
 done
 
 # remove the downloaded dependencies
+cd searcher
 rm -r *application_only*
+cd ..
