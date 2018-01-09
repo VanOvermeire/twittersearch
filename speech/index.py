@@ -10,6 +10,7 @@ TMP_FILE = '/tmp/temp.mp3'
 
 
 def write_audio_to_file(bucket, filename, text):
+    # for now just taking an english voice
     response = client.synthesize_speech(OutputFormat='mp3', VoiceId='Joanna', Text=text)
     stream = response.get('AudioStream')
 
@@ -43,7 +44,14 @@ def extract_bucket_and_key_from_event(event):
 
 def generate_filename(key):
     filename = key.replace('tweets/', '')
-    return filename + '.mp3'
+
+    tag = str.split(key, '***')[1]
+    tag = str.split(tag, '/')[1]
+
+    filename = str.split(filename, '/' + tag)[0] + '-hashtag-' + tag
+    filename = filename + '.mp3'
+
+    return filename
 
 
 def my_handler(event, context):

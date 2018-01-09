@@ -5,7 +5,6 @@ them to your email address.
 
 ### TODO
 - find language using comprehend instead of taking english
-- polly lambda
-- email lambda
 - automatic infrastructure
 - tests
+- split up files and reuse logic
