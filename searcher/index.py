@@ -6,6 +6,9 @@ from application_only_auth import Client
 base_search_url = 'https://api.twitter.com/1.1/search/tweets.json?count=%d&q=%s'
 COUNT = 5
 
+BUCKET_PREFIX = 'tweets/'
+AT_REPLACER = '***'
+
 # doing this outside the lambda is better for performance
 s3_client = boto3.client('s3')
 
@@ -16,18 +19,24 @@ client = Client(TWITTER_KEY, TWITTER_SECRET)
 
 
 def create_key(tag, email):
-    email = email.split('@')[0]
+    # can't have an @ in an s3 key
+    email = email.replace("@", AT_REPLACER)
 
     if '#' in tag:
         tag = tag.replace('#', '')
 
-    return email + '/' + tag
+    return BUCKET_PREFIX + email + '/' + tag
 
 
-def store_in_s3(tweets, bucket, key):
-    payload = '\n'.join(tweets)
+def create_s3_data(email, tweets):
+    payload = email + '\n'
+    payload = payload + '\n'.join(tweets)
+    return payload
+
+
+def store_in_s3(data, bucket, key):
     print('Adding key ' + key + ' to bucket ' + bucket)
-    s3_client.put_object(Body=payload, Bucket=bucket, Key=key)
+    s3_client.put_object(Body=data, Bucket=bucket, Key=key)
 
 
 def get_tweet_text(tag):
@@ -56,7 +65,9 @@ def my_handler(event, context):
     tweets = get_tweet_text(tag)
 
     key = create_key(tag, email)
-    store_in_s3(tweets, BUCKET, key)
+    data = create_s3_data(email, tweets)
+
+    store_in_s3(data, BUCKET, key)
 
     return {
         'message': 'handled event for tag %s and email %s' % (tag, email)
