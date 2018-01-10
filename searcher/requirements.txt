@@ -1,0 +1,2 @@
+####### s3bash-requirements.txt #######
+twitter-application-only-auth >= 0.3.3

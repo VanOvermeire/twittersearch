@@ -13,6 +13,8 @@ function handle_lambda {
 
     cd ${folder}
 
+    pip3 install -r requirements.txt -t . >> /dev/null
+
     zip -r ${zip_name} . >> /dev/null
 
     echo "Uploading zip $zip_name to S3"
@@ -23,22 +25,13 @@ function handle_lambda {
     --s3-bucket ${BUCKET} \
     --s3-key "${LAMBDA_FOLDER}${zip_name}" >> /dev/null
 
-    rm ${zip_name}
+    # remove anything that isn't a python script or requirements.txt
+    ls | grep -v "\.py\|requirements\.txt" | xargs -I{} rm -r {}
 
     cd ..
 }
-
-# add some dependencies
-cd searcher
-pip3 install twitter-application-only-auth -t . >> /dev/null
-cd ..
 
 for folder in "${!LAMBDAS[@]}"
 do
     handle_lambda ${folder} ${LAMBDAS[$folder]}
 done
-
-# remove the downloaded dependencies
-cd searcher
-rm -r *application_only*
-cd ..
