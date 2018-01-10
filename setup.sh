@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-declare -A LAMBDAS=(["searcher"]="TwitterSearcher" ["email"]="MailSenderLambda" ["speech"]="TextToSpeechLambda")
+LAMBDAS=("searcher" "mail" "speech")
 
 BUCKET="lambdas-sam-van-overmeire"
 LAMBDA_FOLDER="lambda-zips/"
@@ -9,10 +9,9 @@ CLOUDFORMATION_FOLDER="cloudformation/"
 SAM_YAML="sam-infra.yaml"
 SAM_STACK_NAME="twitter-searcher-stack"
 
-# gather requirements, upload zip and update lambda; folder and function name should be given as args
+# gather requirements and upload zip; folders should be given as args
 function handle_lambda {
     folder=$1
-    function_name=$2
     zip_name=${folder}.zip
 
     cd ${folder}
@@ -29,9 +28,9 @@ function handle_lambda {
     cd ..
 }
 
-for folder in "${!LAMBDAS[@]}"
+for folder in "${LAMBDAS[@]}"
 do
-    handle_lambda ${folder} ${LAMBDAS[$folder]}
+    handle_lambda ${folder}
 done
 
 echo "Deploying stack"

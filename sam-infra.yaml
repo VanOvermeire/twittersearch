@@ -42,7 +42,7 @@ Resources:
       Description: Mails the audio to the user
       Handler: index.my_handler
       Runtime: python3.6
-      CodeUri: s3://lambdas-sam-van-overmeire/lambda-zips/email.zip
+      CodeUri: s3://lambdas-sam-van-overmeire/lambda-zips/mail.zip
       Role: arn:aws:iam::262438358359:role/S3andSESLambdaRole
       Environment:
           Variables:

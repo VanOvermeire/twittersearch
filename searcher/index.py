@@ -60,7 +60,7 @@ def my_handler(event, context):
     email = slots['mail']
     tag = slots['tag']
 
-    print('Received tag %s and email %s' % (tag, email))
+    print('Received tag %s and mail %s' % (tag, email))
     tweets = get_tweet_text(tag)
 
     key = create_key(tag, email)
@@ -69,5 +69,5 @@ def my_handler(event, context):
     store_in_s3(data, BUCKET, key)
 
     return {
-        'message': 'handled event for tag %s and email %s' % (tag, email)
+        'message': 'handled event for tag %s and mail %s' % (tag, email)
     }

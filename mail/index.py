@@ -9,7 +9,7 @@ ses_client = boto3.client('ses')
 def send_email(mail, tag, url):
     source = os.environ['SOURCE']
 
-    print('Sending email to %s for tag %s' % (mail, tag))
+    print('Sending mail to %s for tag %s' % (mail, tag))
 
     ses_client.send_email(
         Source=source,
@@ -64,5 +64,5 @@ def my_handler(event, context):
     send_email(email, tag, url)
 
     return {
-        'message': 'email dispatched to ' + email
+        'message': 'mail dispatched to ' + email
     }
