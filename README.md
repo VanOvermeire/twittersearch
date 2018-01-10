@@ -25,7 +25,8 @@ your twitter key and secret under `TWITTER_KEY` and `TWITTER_SECRET`
 
 If all of this is done, you can run ./setup.sh with the name of your bcuket & from the root of the project. 
 
-This will upload the lambdas and create your stack. The Lex bot you have to create yourself.
+This will upload the lambdas and create your stack. The Lex bot you have to create yourself. You can use the json files
+in the lex directory if you need guidance.
 
 ### Possible improvements
 - more tests

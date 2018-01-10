@@ -1,0 +1,74 @@
+{
+    "confirmationPrompt": {
+        "maxAttempts": 3, 
+        "messages": [
+            {
+                "content": "Are you sure you want to search for {tag} and send those tweets to {mail} ?", 
+                "contentType": "PlainText"
+            }
+        ]
+    }, 
+    "name": "SearchHashTagIntent", 
+    "checksum": "5834eb4a-ad14-4ad3-b828-ba30fdd90949", 
+    "version": "$LATEST", 
+    "rejectionStatement": {
+        "messages": [
+            {
+                "content": "Ok, not searching for hashtag {tag}", 
+                "contentType": "PlainText"
+            }
+        ]
+    }, 
+    "createdDate": 1515424469.5, 
+    "lastUpdatedDate": 1515581832.211, 
+    "sampleUtterances": [
+        "Please read tweets with hashtag {tag}", 
+        "Read tweets containing hashtag {tag}", 
+        "I want you to read me some tweets", 
+        "Read me tweets", 
+        "Send some tweets to {mail}", 
+        "Find a few tweets with {tag}"
+    ], 
+    "slots": [
+        {
+            "slotType": "AMAZON.EmailAddress", 
+            "name": "mail", 
+            "slotConstraint": "Required", 
+            "valueElicitationPrompt": {
+                "maxAttempts": 2, 
+                "messages": [
+                    {
+                        "content": "What email do you want us to send the tweets to?", 
+                        "contentType": "PlainText"
+                    }
+                ]
+            }, 
+            "priority": 2, 
+            "sampleUtterances": []
+        }, 
+        {
+            "slotType": "Hashtag", 
+            "name": "tag", 
+            "slotConstraint": "Required", 
+            "valueElicitationPrompt": {
+                "maxAttempts": 2, 
+                "messages": [
+                    {
+                        "content": "What hashtag do you want to look for?", 
+                        "contentType": "PlainText"
+                    }
+                ]
+            }, 
+            "priority": 1, 
+            "slotTypeVersion": "1", 
+            "sampleUtterances": []
+        }
+    ], 
+    "fulfillmentActivity": {
+        "type": "CodeHook", 
+        "codeHook": {
+            "uri": "arn:aws:lambda:eu-west-1:262438358359:function:twitter-searcher-stack-TwitterLambda-O8DEIQD0I3B2", 
+            "messageVersion": "1.0"
+        }
+    }
+}

@@ -1,0 +1,35 @@
+{
+    "status": "READY", 
+    "intents": [
+        {
+            "intentVersion": "5", 
+            "intentName": "SearchHashTagIntent"
+        }
+    ], 
+    "name": "TwitterBot", 
+    "locale": "en-US", 
+    "checksum": "8376b7f3-24a1-4232-9ebe-1f64eb0bda2b", 
+    "abortStatement": {
+        "messages": [
+            {
+                "content": "Sorry, I could not understand. Goodbye.", 
+                "contentType": "PlainText"
+            }
+        ]
+    }, 
+    "version": "$LATEST", 
+    "lastUpdatedDate": 1515581875.404, 
+    "createdDate": 1515424361.135, 
+    "clarificationPrompt": {
+        "maxAttempts": 5, 
+        "messages": [
+            {
+                "content": "Sorry, can you please repeat that?", 
+                "contentType": "PlainText"
+            }
+        ]
+    }, 
+    "voiceId": "Joanna", 
+    "childDirected": false, 
+    "idleSessionTTLInSeconds": 180
+}

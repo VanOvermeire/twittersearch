@@ -1,0 +1,29 @@
+{
+    "enumerationValues": [
+        {
+            "value": "#Brexit"
+        }, 
+        {
+            "value": "#google"
+        }, 
+        {
+            "value": "#GoldenGlobes"
+        }, 
+        {
+            "value": "#shoes"
+        }, 
+        {
+            "value": "#aws"
+        }, 
+        {
+            "value": "#cloud"
+        }
+    ], 
+    "name": "Hashtag", 
+    "checksum": "10ed2962-112e-4c5f-bc63-3e86df5f35aa", 
+    "version": "$LATEST", 
+    "lastUpdatedDate": 1515493623.186, 
+    "createdDate": 1515425134.265, 
+    "valueSelectionStrategy": "ORIGINAL_VALUE", 
+    "description": "Popular hashtags from twitter"
+}
