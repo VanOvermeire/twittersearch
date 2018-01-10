@@ -1,13 +1,9 @@
 #!/usr/bin/env bash
 
-LAMBDAS=("searcher" "mail" "speech")
-
-BUCKET="lambdas-sam-van-overmeire"
+LAMBDAS=("searcher" "mail" "speech") # names of the directories which contain the lambdas
 LAMBDA_FOLDER="lambda-zips/"
-CLOUDFORMATION_FOLDER="cloudformation/"
-
-SAM_YAML="sam-infra.yaml"
-SAM_STACK_NAME="twitter-searcher-stack"
+SAM_YAML="sam-infra.yaml" # sam-infra, under infra folder
+SAM_STACK_NAME="twitter-searcher-stack" # default name for the stack, can be changed
 
 # gather requirements and upload zip; folders should be given as args
 function handle_lambda {
@@ -27,6 +23,14 @@ function handle_lambda {
 
     cd ..
 }
+
+if [ $# -lt 1 ]; then
+    echo "Needs a bucket!"
+    echo "Usage ./setup.sh <bucket>"
+    exit 1
+fi
+
+BUCKET=$1
 
 for folder in "${LAMBDAS[@]}"
 do
