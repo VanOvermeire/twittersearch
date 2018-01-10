@@ -7,7 +7,7 @@ ses_client = boto3.client('ses')
 
 
 def send_email(mail, tag, url):
-    source = os.environ['source']
+    source = os.environ['SOURCE']
 
     print('Sending email to %s for tag %s' % (mail, tag))
 
