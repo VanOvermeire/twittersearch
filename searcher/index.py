@@ -69,5 +69,12 @@ def my_handler(event, context):
     store_in_s3(data, BUCKET, key)
 
     return {
-        'message': 'handled event for tag %s and mail %s' % (tag, email)
+        "dialogAction": {
+            "type": "Close",
+            "fulfillmentState": "Fulfilled",
+            "message": {
+                "contentType": "PlainText",
+                "content": "Done. Your tweets will be arriving in your inbox shortly!"
+            }
+        }
     }
