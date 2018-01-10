@@ -33,6 +33,8 @@ do
     handle_lambda ${folder}
 done
 
+cd infra
+
 echo "Deploying stack"
 aws cloudformation deploy \
     --template-file ${SAM_YAML} \
