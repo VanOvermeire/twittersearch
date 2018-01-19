@@ -12,6 +12,9 @@ function handle_lambda {
 
     cd ${folder}
 
+    # TODO add the helpers folder, and remove afterwards
+#    cp -rf ../twittersearchhelpers/ .
+
     pip3 install -r requirements.txt -t . >> /dev/null
     zip -r ${zip_name} . >> /dev/null
 

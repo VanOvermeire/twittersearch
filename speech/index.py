@@ -2,7 +2,7 @@ import boto3
 
 # doing this outside the lambda is better for performance
 s3_client = boto3.client('s3')
-client = boto3.client('polly')
+polly_client = boto3.client('polly')
 
 AUDIO_BUCKET_PREFIX = 'audio/'
 CHUNK_SIZE = 1024
@@ -11,7 +11,7 @@ TMP_FILE = '/tmp/temp.mp3'
 
 def write_audio_to_file(bucket, filename, text):
     # for now just taking an english voice
-    response = client.synthesize_speech(OutputFormat='mp3', VoiceId='Joanna', Text=text)
+    response = polly_client.synthesize_speech(OutputFormat='mp3', VoiceId='Joanna', Text=text)
     stream = response.get('AudioStream')
 
     with open(TMP_FILE, 'wb') as filewriter:
