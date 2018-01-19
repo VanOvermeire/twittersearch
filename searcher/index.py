@@ -2,40 +2,17 @@ import urllib.parse
 import boto3
 import os
 from application_only_auth import Client
+from twittersearchhelpers import twitter_s3
 
 base_search_url = 'https://api.twitter.com/1.1/search/tweets.json?count=%d&q=%s'
 COUNT = 5
 
-TWEET_BUCKET_PREFIX = 'tweets/'
-AT_REPLACER = '***'
-
 # doing this outside the lambda is better for performance
 s3_client = boto3.client('s3')
 
-BUCKET = os.environ['BUCKET']
 TWITTER_KEY = os.environ['TWITTER_KEY']
 TWITTER_SECRET = os.environ['TWITTER_SECRET']
 client = Client(TWITTER_KEY, TWITTER_SECRET)
-
-
-def create_key(tag, email):
-    # can't have an @ in an s3 key
-    email = email.replace("@", AT_REPLACER)
-
-    if '#' in tag:
-        tag = tag.replace('#', '')
-
-    return TWEET_BUCKET_PREFIX + email + '/' + tag
-
-
-def create_s3_data(tweets):
-    payload = '\n'.join(tweets)
-    return payload
-
-
-def store_in_s3(data, bucket, key):
-    print('Adding key ' + key + ' to bucket ' + bucket)
-    s3_client.put_object(Body=data, Bucket=bucket, Key=key)
 
 
 def get_tweet_text(tag):
@@ -63,10 +40,10 @@ def my_handler(event, context):
     print('Received tag %s and mail %s' % (tag, email))
     tweets = get_tweet_text(tag)
 
-    key = create_key(tag, email)
-    data = create_s3_data(tweets)
+    key = twitter_s3.create_tweet_key(tag, email)
+    data = twitter_s3.create_s3_data(tweets)
 
-    store_in_s3(data, BUCKET, key)
+    twitter_s3.store_in_s3(s3_client, data, key)
 
     return {
         "dialogAction": {

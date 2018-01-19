@@ -1,12 +1,12 @@
 from twittersearchhelpers import twitter_s3
 from moto import mock_s3
 import boto3
+import os
 
 EXAMPLE_BUCKET = 'examplebucket'
 EXAMPLE_KEY = 'our_key'
 
 
-# TODO actually use the helpers for the lambdas, change setup to add those to the lambda zip
 @mock_s3
 def test_get_signed_url():
     s3_client = boto3.client('s3')
@@ -24,8 +24,9 @@ def test_get_signed_url():
 def test_put_s3_object():
     s3_client = boto3.client('s3')
     s3_client.create_bucket(Bucket=EXAMPLE_BUCKET)
+    os.environ['BUCKET'] = EXAMPLE_BUCKET # fake the environment variable
 
-    twitter_s3.store_in_s3(s3_client, 'here is some data', EXAMPLE_BUCKET, EXAMPLE_KEY)
+    twitter_s3.store_in_s3(s3_client, 'here is some data', EXAMPLE_KEY)
 
     response = s3_client.list_objects_v2(Bucket=EXAMPLE_BUCKET)
 

@@ -1,3 +1,5 @@
+import os
+
 TWEET_BUCKET_PREFIX = 'tweets/'
 AT_REPLACER = '***'
 
@@ -8,6 +10,15 @@ def extract_bucket_and_key_from_event(event):
     key = record['s3']['object']['key']
 
     return bucket, key
+
+
+def extract_email_and_tag_from_audio_key(key):
+    result = str.split(key, 'audio/')[1]
+    result = str.split(result, '-hashtag-')
+    email = result[0].replace('***', '@')
+    tag = str.split(result[1], '.mp3')[0]
+
+    return email, tag
 
 
 def create_s3_data(tweets):
@@ -43,7 +54,8 @@ def get_s3_object_as_string(client, bucket, key):
     return s3_object.decode('utf-8')
 
 
-def store_in_s3(client, data, bucket, key):
+def store_in_s3(client, data, key):
+    bucket = os.environ['BUCKET']
     print('Adding key ' + key + ' to bucket ' + bucket)
     client.put_object(Body=data, Bucket=bucket, Key=key)
 

@@ -29,8 +29,7 @@ This will upload the lambdas and create your stack. The Lex bot you have to crea
 in the lex directory if you need guidance.
 
 ### Possible improvements
-- more tests
-- split up files and reuse
+
 - validation
 - find language using comprehend instead of taking english
 - accept 'count' from Lex, with the number of tweets requested

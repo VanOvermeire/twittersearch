@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# TODO still need to test new setup (with added helper files)
+
 LAMBDAS=("searcher" "mail" "speech") # names of the directories which contain the lambdas
 LAMBDA_FOLDER="lambda-zips/"
 SAM_YAML="sam-infra.yaml" # sam-infra, under infra folder
@@ -12,8 +14,7 @@ function handle_lambda {
 
     cd ${folder}
 
-    # TODO add the helpers folder, and remove afterwards
-#    cp -rf ../twittersearchhelpers/ .
+    cp -rf ../twittersearchhelpers .
 
     pip3 install -r requirements.txt -t . >> /dev/null
     zip -r ${zip_name} . >> /dev/null
@@ -21,8 +22,8 @@ function handle_lambda {
     echo "Uploading zip $zip_name to S3"
     aws s3 cp ${zip_name} "s3://${BUCKET}/$LAMBDA_FOLDER" >> /dev/null
 
-    # optional: remove anything that isn't a python script or requirements.txt
-    ls | grep -v "\.py\|requirements\.txt" | xargs -I{} rm -r {}
+    # optional cleanup
+    ls | grep -v "\.py\|requirements\.txt" | xargs -I{} rm -rf {}
 
     cd ..
 }
@@ -38,6 +39,7 @@ BUCKET=$1
 for folder in "${LAMBDAS[@]}"
 do
     handle_lambda ${folder}
+    break
 done
 
 cd infra
